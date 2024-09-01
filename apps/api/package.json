@@ -1,0 +1,13 @@
+{
+    "name": "@midday/api",
+    "private": true,
+    "scripts": {
+        "dev": "supabase start",
+        "login": "supabase login",
+        "db:reset": "",
+        "db:mig": "supabase db push --db-url postgresql://postgres.agiyeizsowethckpxicl:vCjX7ddV0tYoNCOc@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres  --debug"
+    },
+    "dependencies": {
+        "supabase": "^1.187.10"
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@midday/jobs",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test src"
+  },
+  "dependencies": {
+    "@fast-csv/format": "5.0.0",
+    "@midday/documents": "workspace:*",
+    "@midday/import": "workspace:*",
+    "@midday-ai/engine": "^0.1.0-alpha.22",
+    "@trigger.dev/react": "2.3.19",
+    "@trigger.dev/resend": "2.3.19",
+    "@trigger.dev/sdk": "2.3.19",
+    "@trigger.dev/supabase": "^2.3.19",
+    "change-case": "^5.4.4",
+    "nanoid": "^5.0.7"
+  }
+}
