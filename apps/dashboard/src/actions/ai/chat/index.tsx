@@ -31,6 +31,7 @@ import { getSpendingTool } from "./tools/spending";
 import { z } from "zod";
 import { CoreMessage, generateId } from "ai";
 import { CameraView } from "@/components/camera-view";
+import { UsageView } from "@/components/usage-view";
 
 
 const ratelimit = new Ratelimit({
@@ -106,8 +107,10 @@ export async function submitUserMessage(
     If the user just wants the runway, call \`getRunway\` function.
     If the user just wants the profit, call \`getProfit\` function.
     If the user just wants to find transactions, call \`getTransactions\` function.
+   
     If the user just wants to find documents, invoices or receipts, call \`getDocuments\` function.
     If the user wants to view Cameras, call \`viewCameras\` function.
+   
     Always try to call the functions with default values, otherwise ask the user to respond with parameters. Just show one example if you can't call the function.
     
     `,
@@ -185,12 +188,52 @@ export async function submitUserMessage(
           return <Message role="assistant" content={<CameraView />} />;
         },
       },
-      getSpending: getSpendingTool({
-        aiState,
-        currency: defaultValues.currency,
-        dateFrom: defaultValues.from,
-        dateTo: defaultValues.to,
-      }),
+      getSpending: {
+        description: "view spendings for unknown catergory",
+        parameters: z.object({
+          type: z.enum(["electricity", "water", "gas"]),
+        }),
+        generate: async function* ({ type }) {
+          const toolCallId = generateId();
+
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content: [
+                {
+                  type: "tool-call",
+                  toolCallId,
+                  toolName: "viewUsage",
+                  args: { type },
+                },
+              ],
+            },
+            {
+              id: nanoid(),
+              role: "tool",
+              content: [
+                {
+                  type: "tool-result",
+                  toolName: "viewUsage",
+                  toolCallId,
+                  result: `The current usage for ${type} is currently displayed on the screen`,
+                },
+              ],
+            },
+          ],
+        });
+
+
+          return (
+            <Message role="assistant" content={<UsageView type={type} />} />
+          );
+        },
+      },
+  
       getBurnRate: getBurnRateTool({
         aiState,
         currency: defaultValues.currency,
