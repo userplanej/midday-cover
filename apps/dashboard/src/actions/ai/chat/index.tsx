@@ -97,7 +97,7 @@ export async function submitUserMessage(
   let textNode: undefined | React.ReactNode;
 
   const result = await streamUI({
-    model: openai("gpt-4o-mini"),
+    model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
     system: `\
     You are a helpful assistant in Midday who can help users ask questions about their transactions, revenue, spending find invoices and more.
@@ -110,7 +110,7 @@ export async function submitUserMessage(
    
     If the user just wants to find documents, invoices or receipts, call \`getDocuments\` function.
     If the user wants to view Cameras, call \`viewCameras\` function.
-   
+    If the user wants to view Usages, call \`viewUsage\` function.
     Always try to call the functions with default values, otherwise ask the user to respond with parameters. Just show one example if you can't call the function.
     
     `,
@@ -188,8 +188,8 @@ export async function submitUserMessage(
           return <Message role="assistant" content={<CameraView />} />;
         },
       },
-      getSpending: {
-        description: "view spendings for unknown catergory",
+      viewUsage: {
+        description: "view current usage for electricity, water, or gas",
         parameters: z.object({
           type: z.enum(["electricity", "water", "gas"]),
         }),
@@ -233,7 +233,12 @@ export async function submitUserMessage(
           );
         },
       },
-  
+      getSpending: getSpendingTool({
+        aiState,
+        currency: defaultValues.currency,
+        dateFrom: defaultValues.from,
+        dateTo: defaultValues.to,
+      }),
       getBurnRate: getBurnRateTool({
         aiState,
         currency: defaultValues.currency,
