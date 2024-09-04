@@ -12,6 +12,7 @@
     "start:website": "turbo start --filter=@midday/website",
     "dev:api": "turbo dev --filter=@midday/api",
     "dev:dashboard": "turbo dev --filter=@midday/dashboard",
+    "build:website": "turbo build --filter=@midday/website",
     "build:dashboard": "turbo build --filter=@midday/dashboard",
     "dev:engine": "turbo dev --filter=@midday/engine",
     "dev:website": "turbo dev --filter=@midday/website ",

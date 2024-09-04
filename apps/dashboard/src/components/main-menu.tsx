@@ -29,6 +29,7 @@ const icons = {
   "/tracker": () => <Icons.Tracker size={22} />,
   "/vault": () => <Icons.Files size={22} />,
   "/settings": () => <Icons.Settings size={22} />,
+  "/account": () => <Icons.Settings size={22} />,
   "/inbox": () => <Icons.Inbox2 size={22} />,
 };
 
@@ -72,6 +73,10 @@ const defaultItems = [
   {
     path: "/settings",
     name: "Settings",
+  },
+  {
+    path: "/account",
+    name: "Account",
   },
 ];
 

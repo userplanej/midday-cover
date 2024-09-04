@@ -36,3 +36,5 @@ yarn-error.log*
 .vercel
 .vscode
 .env*.local
+packages/email/.react-email
+packages/ui/storybook-static/project.json
