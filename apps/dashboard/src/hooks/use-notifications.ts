@@ -86,15 +86,16 @@ export function useNotifications() {
     }
   };
 
+
   useEffect(() => {
     async function fetchUser() {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
+        data: { user},
+      } = await supabase.auth.getUser();
 
       const { data: userData } = await getUserQuery(
         supabase,
-        session?.user?.id
+        user!.id
       );
 
       if (userData) {
