@@ -16,6 +16,7 @@ export function Assistant() {
   const [isExpanded, setExpanded] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [chatId, setChatId] = useState();
+  const [completion, setCompletion] = useState('');
   const [messages, setMessages] = useUIState<typeof AI>();
   const [aiState, setAIState] = useAIState<typeof AI>();
   const [input, setInput] = useState<string>("");
@@ -70,6 +71,8 @@ export function Assistant() {
       <Header toggleSidebar={toggleOpen} isExpanded={isExpanded} />
 
       <Chat
+        completion={completion}
+        submitChat={setCompletion}
         submitMessage={setMessages}
         messages={messages}
         user={aiState.user}

@@ -25,6 +25,7 @@
   "dependencies": {
     "@biomejs/biome": "1.8.3",
     "@manypkg/cli": "^0.21.4",
+    "canvas": "^2.11.2",
     "react-use": "^17.5.1",
     "turbo": "2.0.12",
     "typescript": "^5.5.4"

@@ -6,7 +6,7 @@ import { useScrollAnchor } from "@/hooks/use-scroll-anchor";
 import { useAssistantStore } from "@/store/assistant";
 import { ScrollArea } from "@midday/ui/scroll-area";
 import { Textarea } from "@midday/ui/textarea";
-import { useActions } from "ai/rsc";
+import { readStreamableValue, useActions } from "ai/rsc";
 import { nanoid } from "nanoid";
 import { useEffect, useRef } from "react";
 import { ChatEmpty } from "./chat-empty";
@@ -14,8 +14,11 @@ import { ChatExamples } from "./chat-examples";
 import { ChatFooter } from "./chat-footer";
 import { ChatList } from "./chat-list";
 import { UserMessage } from "./messages";
+import { generateCompletion } from "@/actions/ai/chat/generate-completion";
 
 export function Chat({
+  completion,
+  submitChat,
   messages,
   submitMessage,
   user,
@@ -50,6 +53,11 @@ export function Chat({
       },
     ]);
 
+    const streamableCompletion = await generateCompletion(value);
+    for await (const text of readStreamableValue(streamableCompletion)) {
+      console.log(text);
+      submitChat(text ?? '');
+    }
     const responseMessage = await submitUserMessage(value);
 
     submitMessage((messages: ClientMessage[]) => [
@@ -81,6 +89,7 @@ export function Chat({
     <div className="relative">
       <ScrollArea className="todesktop:h-[335px] md:h-[335px]" ref={scrollRef}>
         <div ref={messagesRef}>
+          {completion}
           {messages.length ? (
             <ChatList messages={messages} className="p-4 pb-8" />
           ) : (
