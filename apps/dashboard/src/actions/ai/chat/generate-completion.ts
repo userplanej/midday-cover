@@ -26,6 +26,8 @@ const orders_context = JSON.stringify(getOrders());
 
 export async function generateCompletion(prompt: string) {
 
+  console.log('generateCompletion received prompt : ', prompt);
+
   const result = await streamText({
     model: registry.languageModel(models[1]),
     system: `\
