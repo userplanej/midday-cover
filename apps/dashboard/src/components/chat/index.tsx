@@ -13,7 +13,7 @@ import { ChatEmpty } from "./chat-empty";
 import { ChatExamples } from "./chat-examples";
 import { ChatFooter } from "./chat-footer";
 import { ChatList } from "./chat-list";
-import { UserMessage } from "./messages";
+import { BotMessage, UserMessage } from "./messages";
 import { generateCompletion } from "@/actions/ai/chat/generate-completion";
 
 export function Chat({
@@ -89,9 +89,9 @@ export function Chat({
     <div className="relative">
       <ScrollArea className="todesktop:h-[335px] md:h-[335px]" ref={scrollRef}>
         <div ref={messagesRef}>
-          {completion}
-          {messages.length ? (
-            <ChatList messages={messages} className="p-4 pb-8" />
+          
+          {messages.length || completion ? (
+            <ChatList completion={completion} messages={messages} className="p-4 pb-8" />
           ) : (
             <ChatEmpty firstName={user?.full_name.split(" ").at(0)} />
           )}

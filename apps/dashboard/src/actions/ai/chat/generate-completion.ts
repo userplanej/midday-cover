@@ -29,7 +29,8 @@ export async function generateCompletion(prompt: string) {
   console.log('generateCompletion received prompt : ', prompt);
 
   const result = await streamText({
-    model: registry.languageModel(models[1]),
+                       
+    model: registry.languageModel(models[1] as string),
     system: `\
     - You are a friendly assistant who is knowledgeable about home automation and e-commerce order tracking management.
     - latest stored tracking information is provided to you for understanding general tracking status
@@ -42,8 +43,12 @@ export async function generateCompletion(prompt: string) {
     - when you answer a question, you should provide a response with "고객님, " at the beginning
     - you do not ever use lists, tables, or bullet points; instead, you provide a single response
   `,
-    maxTokens: 2000,
-    prompt
+   
+   
+    prompt,
+    onFinish: (result) => {
+      console.log('generateCompletion result : ', result);
+    } 
   });
 
   return createStreamableValue(result.textStream).value;
