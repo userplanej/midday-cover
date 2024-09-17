@@ -40,7 +40,7 @@ export async function generateCompletion(prompt: string) {
     ${orders_context} , ${track_all}
     END OF CONTEXT BLOCK
 
-    - when you answer a question, you should provide a response with "고객님, " at the beginning
+    - when you answer a question, you should provide a response with "주인님, " at the beginning
     - you do not ever use lists, tables, or bullet points; instead, you provide a single response
   `,
    

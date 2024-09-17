@@ -1,6 +1,6 @@
 "use server";
 
-import { BotMessage, Message, SpinnerMessage } from "@/components/chat/messages";
+import { BotCard, BotMessage, Message, SpinnerMessage } from "@/components/chat/messages";
 import { openai } from "@ai-sdk/openai";
 import { client as RedisClient } from "@midday/kv";
 import {
@@ -32,6 +32,9 @@ import { z } from "zod";
 import { CoreMessage, generateId } from "ai";
 import { CameraView } from "@/components/camera-view";
 import { UsageView } from "@/components/usage-view";
+import { Orders } from "@/components/orders";
+import { getAllTrackingInformation, getOrders, getTrackingInformation } from "@/components/data";
+import { Tracker } from "@/components/tracker";
 
 
 const ratelimit = new Ratelimit({
@@ -74,6 +77,9 @@ export async function submitUserMessage(
   const user = await getUser();
   const teamId = user?.data?.team_id as string;
 
+  const track_all = JSON.stringify(getAllTrackingInformation());
+  const orders_context = JSON.stringify(getOrders());
+
   const defaultValues = {
     from: subMonths(startOfMonth(new Date()), 12).toISOString(),
     to: new Date().toISOString(),
@@ -100,18 +106,17 @@ export async function submitUserMessage(
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
     system: `\
-    You are a helpful assistant in Midday who can help users ask questions about their transactions, revenue, spending find invoices and more.
+      - You are a helpful assistant
+      - latest stored tracking information is provided to you for understanding general tracking status
 
-    If the user wants to see spending, call \`getSpending\` function.
-    If the user just wants the burn rate, call \`getBurnRate\` function.
-    If the user just wants the runway, call \`getRunway\` function.
-    If the user just wants the profit, call \`getProfit\` function.
-    If the user just wants to find transactions, call \`getTransactions\` function.
-   
-    If the user just wants to find documents, invoices or receipts, call \`getDocuments\` function.
-    If the user wants to view Cameras, call \`viewCameras\` function.
-    If the user wants to know usage for electricity, water, or gas , call \`viewUsage\` function.
-    Always try to call the functions with default values, otherwise ask the user to respond with parameters. Just show one example if you can't call the function.
+      - Tracking Information 
+        START CONTEXT BLOCK
+          ${orders_context}  
+          ${track_all}
+        END OF CONTEXT BLOCK
+
+      - Only respond to questions using tool calls. 
+
     `,
     messages: [
       ...aiState.get().messages.map((message: any) => ({
@@ -148,7 +153,7 @@ export async function submitUserMessage(
     },
     tools: {
       viewCameras: {
-        description: "view current active cameras",
+        description: "view security cameras",
         parameters: z.object({}),
         generate: async function* ({}) {
           const toolCallId = generateId();
@@ -187,7 +192,6 @@ export async function submitUserMessage(
           return <Message role="assistant" content={<CameraView />} />;
         },
       },
-
       viewUsage: {
         description: "view current usage for electricity, water, or gas",
         parameters: z.object({
@@ -200,40 +204,123 @@ export async function submitUserMessage(
             ...aiState.get(),
             messages: [
               ...aiState.get().messages,
-            {
-              id: nanoid(),
-              role: "assistant",
-              content: [
-                {
-                  type: "tool-call",
-                  toolCallId,
-                  toolName: "viewUsage",
-                  args: { type },
-                },
-              ],
-            },
-            {
-              id: nanoid(),
-              role: "tool",
-              content: [
-                {
-                  type: "tool-result",
-                  toolName: "viewUsage",
-                  toolCallId,
-                  result: `The current usage for ${type} is currently displayed on the screen`,
-                },
-              ],
-            },
-          ],
-        });
-
-
+              {
+                id: nanoid(),
+                role: "assistant",
+                content: [
+                  {
+                    type: "tool-call",
+                    toolCallId,
+                    toolName: "viewUsage",
+                    args: { type },
+                  },
+                ],
+              },
+              {
+                id: nanoid(),
+                role: "tool",
+                content: [
+                  {
+                    type: "tool-result",
+                    toolName: "viewUsage",
+                    toolCallId,
+                    result: `The current usage for ${type} is currently displayed on the screen`,
+                  },
+                ],
+              },
+            ],
+          });
           return (
             <Message role="assistant" content={<UsageView type={type} />} />
           );
         },
       },
+      listOrders: {
+        description: "list all e-commerce orders",
+        parameters: z.object({}),
+        generate: async function* ({}) {
+          const toolCallId = generateId();
+          let orders = getOrders();
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: nanoid(),
+                role: "assistant",
+                content: [
+                  {
+                    type: "tool-call",
+                    toolCallId,
+                    toolName: "listOrders",
+                    args: {},
+                  },
+                ],
+              },
+              {
+                id: nanoid(),
+                role: "tool",
+                content: [
+                  {
+                    type: "tool-result",
+                    toolName: "listOrders",
+                    toolCallId,
+                    result: `The current orders are currently displayed on the screen`,
+                  },
+                ],
+              },
+            ],
+          });
 
+          return (
+            <BotCard>
+              <Orders orders={orders} />
+            </BotCard>
+          );
+        },
+      },
+      viewTrackingInformation: {
+        description: "view tracking information for a specific order",
+        parameters: z.object({
+          orderId: z.string(),
+        }),
+        generate: async function* (orderId) {
+          const toolCallId = generateId();
+          const trackingInformation = getTrackingInformation(orderId);
+         
+          aiState.done({
+            ...aiState.get(),
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: nanoid(),
+                role: "assistant",
+                content: [
+                  {
+                    type: "tool-call",
+                    toolCallId,
+                    toolName: "viewTrackingInformation",
+                    args: {},
+                  },
+                ],
+              },
+              {
+                id: nanoid(),
+                role: "tool",
+                content: [
+                  {
+                    type: "tool-result",
+                    toolName: "viewTrackingInformation",
+                    toolCallId,
+                    result: `The current orders are currently displayed on the screen`,
+                  },
+                ],
+              },
+            ],
+          });
+          return <Message role="assistant" content={<Tracker trackingInformation={trackingInformation} />} />;
+        },
+      },
       getSpending: getSpendingTool({
         aiState,
         currency: defaultValues.currency,

@@ -117,7 +117,7 @@ export const Message = ({
       initial={{ y: 5, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
     >
-      <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">
+      <div className="flex size-[25px] shrink-0 select-none items-center justify-center">  
         {role === "assistant" ? <ChatAvatar role="assistant" /> : <ChatAvatar  role="assistant"/>}
       </div>
 
