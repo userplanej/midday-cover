@@ -30,7 +30,7 @@ export default function Page() {
     }, 8000);
     // 마지막 애니메이션 후 4초 뒤에 리다이렉트
     const redirectTimer = setTimeout(() => {
-      router.push('http://localhost:3001');
+      router.push('/');
     }, 12000);
 
     // 컴포넌트가 언마운트될 때 타이머들을 정리합니다
