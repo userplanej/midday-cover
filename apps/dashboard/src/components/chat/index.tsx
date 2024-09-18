@@ -119,7 +119,7 @@ export function Chat({
             autoCorrect="off"
             value={input}
             className="h-12 min-h-12 pt-3 resize-none border-none"
-            placeholder="2.Ask Midday a question..."
+            placeholder="온라인 주문목록을 확인해보세요."
             onKeyDown={onKeyDown}
             onChange={(evt) => {
               setInput(evt.target.value);

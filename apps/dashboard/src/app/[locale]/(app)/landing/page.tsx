@@ -1,5 +1,5 @@
 'use client';
-
+import "./style.css";
 import { AnimatedText } from "@/components/animated-text";
 import { cn } from "@midday/ui/cn";
 import { redirect, useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ export default function Page() {
     }, 4000);
     //  Agentic Workflow
     const timer2 = setTimeout(() => {
-      setCurrentText("Agentic Workflow");
+      setCurrentText("Multi-step Agentic Workflows");
     }, 8000);
     // 마지막 애니메이션 후 4초 뒤에 리다이렉트
     const redirectTimer = setTimeout(() => {
@@ -45,7 +45,7 @@ export default function Page() {
     <div
     className={cn(
       `${DepartureMono.variable} ${GeistSans.variable} ${GeistMono.variable}`,
-      "antialiased dark",
+      "antialiased  bg-black text-white",
     )}
   >
     <div className="h-screen w-screen flex flex-col items-center justify-center relative overflow-hidden">
