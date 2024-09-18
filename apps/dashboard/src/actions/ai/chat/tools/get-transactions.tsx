@@ -10,7 +10,7 @@ type Args = {
 
 export function getTransactionsTool({ aiState }: Args) {
   return {
-    description: "Find transactions",
+    description: "Find Transactions ",
     parameters: z.object({
       name: z.string().describe("The name of the transactions").optional(),
       categories: z

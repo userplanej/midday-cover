@@ -6,7 +6,7 @@ import type { StreamableValue } from "ai/rsc";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { ErrorFallback } from "../error-fallback";
 import { MemoizedReactMarkdown } from "../markdown";
-import { ChatAvatar } from "./chat-avatar";
+import { ChatAvatar, ReasonAvatar } from "./chat-avatar";
 import { spinner } from "./spinner";
 import { motion } from "framer-motion";
 
@@ -35,6 +35,43 @@ export function SpinnerMessage() {
         {spinner}
       </div>
     </div>
+  );
+}
+
+export function BotReason({
+  content,
+}: {
+  content: string | StreamableValue<string>;
+}) {
+  const text = useStreamableText(content);
+
+  return (
+    <ErrorBoundary errorComponent={ErrorFallback}>
+      <div className="group relative flex items-start">
+        <div className="flex size-[25px] shrink-0 select-none items-center justify-center">
+          <ReasonAvatar role="assistant" />
+        </div>
+
+        <div className="ml-4 flex-1 space-y-2  overflow-hidden pl-2 text-xs font-mono">
+          <MemoizedReactMarkdown
+            className="prose break-words dark:prose-invert leading-relaxed prose-pre:p-0 mb-2 last:mb-0 text-xs font-mono"
+            components={{
+              p({ children }) {
+                return children;
+              },
+              ol({ children }) {
+                return <ol>{children}</ol>;
+              },
+              ul({ children }) {
+                return <ul>{children}</ul>;
+              },
+            }}
+          >
+            {text}
+          </MemoizedReactMarkdown>
+        </div>
+      </div>
+    </ErrorBoundary>
   );
 }
 

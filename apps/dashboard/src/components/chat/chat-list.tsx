@@ -2,7 +2,7 @@
 
 import type { ClientMessage } from "@/actions/ai/types";
 import { cn } from "@midday/ui/cn";
-import { BotMessage } from "./messages";
+import { BotMessage, BotReason } from "./messages";
 
 type Props = {
   completion: string;
@@ -17,7 +17,7 @@ export function ChatList({ messages, className , completion}: Props) {
     return null;
   }
   
-  const  textNode = <BotMessage content={completion} />
+  const  textNode = <BotReason content={completion} />
 
   return (
     <div className={cn("flex flex-col", className)}>

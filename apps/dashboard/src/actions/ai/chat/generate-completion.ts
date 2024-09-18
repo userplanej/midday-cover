@@ -32,7 +32,7 @@ export async function generateCompletion(prompt: string) {
 
   const result = await streamText({
                        
-    model: registry.languageModel(models[1] as string),
+    model: registry.languageModel(models[0] as string),
     system: `\
       - You are a friendly assistant who is knowledgeable about home automation and e-commerce order tracking management.
       - latest stored tracking information is provided to you for understanding general tracking status

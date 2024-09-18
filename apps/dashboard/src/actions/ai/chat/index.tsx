@@ -96,11 +96,6 @@ export async function submitUserMessage(
         role: "user",
         content,
       },
-      {
-        id: nanoid(),
-        role: "assistant",
-        content: artifact,
-      },
     ],
   });
 
@@ -112,15 +107,14 @@ export async function submitUserMessage(
     initial: <SpinnerMessage />,
     system: `\
       - You are a helpful assistant
-      - latest stored tracking information is provided to you for understanding general tracking status
+      - latest stored tracking information is provided to you for understanding general tracking status.
+      - If user's activity is related to financial, find appropriate tool to call.
       - Tracking Information 
         START CONTEXT BLOCK
           ${orders_context}  
           ${track_all}
+          ${artifact}
         END OF CONTEXT BLOCK
-      - Only respond to questions using tool calls. 
-     
-
     `,
    
     messages: [
