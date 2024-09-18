@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { MainMenu } from "./main-menu";
 import { TeamMenu } from "./team-menu";
 import Image from "next/image";
-import yourman from 'public/yourman_transparent_background.png';
+import yourman from 'public/assistant_app_icon.png';
 
 export function Sidebar() {
   const initialItems = cookies().has(Cookies.MenuConfig)

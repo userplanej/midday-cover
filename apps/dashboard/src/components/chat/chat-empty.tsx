@@ -8,7 +8,7 @@ type Props = {
 
 export function ChatEmpty({ firstName }: Props) {
   return (
-    <div className="w-full mt-[0px] todesktop:mt-12 md:mt-12 flex flex-col items-center justify-items-start text-center">
+    <div className="w-full  mt-6 todesktop:mt-12 md:mt-12 flex flex-col items-center justify-items-start text-center">
          <div className="relative size-36 bg-zinc-200 flex-shrink-0 rounded-lg">
             <Image
               src={strawberry}

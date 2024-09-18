@@ -14,7 +14,7 @@ type Args = {
 
 export function getSpendingTool({ aiState, currency, dateFrom, dateTo }: Args) {
   return {
-    description: "Get spending from transactions",
+    description: "지출과 관련된 정보를 가져옵니다.",
     parameters: z.object({
       currency: z
         .string()

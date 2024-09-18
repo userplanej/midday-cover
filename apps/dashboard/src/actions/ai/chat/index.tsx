@@ -43,7 +43,7 @@ const ratelimit = new Ratelimit({
 });
 
 export async function submitUserMessage(
-  content: string,
+  content: string, artifact: string
 ): Promise<ClientMessage> {
   "use server";
   const ip = headers().get("x-forwarded-for");
@@ -96,6 +96,11 @@ export async function submitUserMessage(
         role: "user",
         content,
       },
+      {
+        id: nanoid(),
+        role: "assistant",
+        content: artifact,
+      },
     ],
   });
 
@@ -108,16 +113,16 @@ export async function submitUserMessage(
     system: `\
       - You are a helpful assistant
       - latest stored tracking information is provided to you for understanding general tracking status
-
       - Tracking Information 
         START CONTEXT BLOCK
           ${orders_context}  
           ${track_all}
         END OF CONTEXT BLOCK
-
       - Only respond to questions using tool calls. 
+     
 
     `,
+   
     messages: [
       ...aiState.get().messages.map((message: any) => ({
         role: message.role,

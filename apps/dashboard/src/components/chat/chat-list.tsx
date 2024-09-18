@@ -28,6 +28,7 @@ export function ChatList({ messages, className , completion}: Props) {
             {message.role === 'assistant' ? (
               <>
                 {textNode}
+                <div className="my-4" />
                 {message.display}
               </>
             ) : (
