@@ -113,7 +113,7 @@ export function OTPSignIn({ className }: Props) {
               <FormItem>
                 <FormControl>
                   <Input
-                    placeholder="Enter phone number or email"
+                    placeholder="email 주소를 넣고 Enter를 누르시면 OTP 코드가 전송됩니다."
                     {...field}
                     autoCapitalize="false"
                     autoCorrect="false"
