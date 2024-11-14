@@ -7,7 +7,7 @@ interface AssistantState {
 }
 
 export const useAssistantStore = create<AssistantState>()((set) => ({
-  isOpen: true,
+  isOpen: true, 
   message: undefined,
   setOpen: (message) => set((state) => ({ isOpen: !state.isOpen, message })),
 }));
