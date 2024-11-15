@@ -12,4 +12,6 @@ export const chatExamples = [
   "Forecast revenue",
   "Analyze monthly expenses",
  "Summarize quarterly expenses",
+ "Generate a cash flow statement",
+ "Calculate tax liability",
 ];
