@@ -2,7 +2,7 @@
 
 import type { ClientMessage } from "@/actions/ai/types";
 import { cn } from "@midday/ui/cn";
-import { BotMessage, BotReason } from "./messages";
+import { BotMessage, BotReason, UserMessage } from "./messages";
 
 type Props = {
   completion: string;
@@ -25,15 +25,27 @@ export function ChatList({ messages, className , completion}: Props) {
         .filter((tool) => tool.display !== undefined)
         .map((message, index) => (
           <div key={message.id}>
-            {message.role === 'assistant' ? (
-              <>
-                {textNode}
-                <div className="my-4" />
-                {message.display}
-              </>
-            ) : (
-              message.display
-            )}
+            { message.role === 'assistant' ? (
+                <>
+                  {textNode}
+                  <div className="my-4" />
+                  {message.display}
+                </>
+              ) 
+              : message.role === 'user' ? (  
+                <>
+                  <div className="my-4" />
+                  {message.display}
+                </>
+
+              )
+              :
+              (  
+                <div className="my-1" />
+              )
+             
+            }
+        
             {index < messages.length - 1 && <div className="my-4" />}
           </div>
         ))}
