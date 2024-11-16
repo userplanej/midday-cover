@@ -23,7 +23,7 @@ const models = [
   "google:gemini-1.5-flash",
 ];
 
-const track_all = JSON.stringify(getAllTrackingInformation());
+const tracking_information = JSON.stringify(getAllTrackingInformation());
 const orders_context = JSON.stringify(getOrders());
 
 export async function generateCompletion(prompt: string) {
@@ -35,20 +35,34 @@ export async function generateCompletion(prompt: string) {
     model: registry.languageModel(models[0] as string),
     system: `\
       - You are a friendly assistant who is knowledgeable about home automation and e-commerce order tracking management.
-      - latest stored tracking information is provided to you for understanding general tracking status
+      - latest stored tracking information is provided to you for understanding general tracking status.
+      - latest stored orders information is provided to you for understanding general orders status.
+      - You are able to add resources to your knowledge base.
+      - You are able to get information from your knowledge base.
+      - You are able to answer questions based on the tracking information and orders context.
+      - You are able to store user information in your knowledge base.
+      - You are able to provide responses to user questions.
+      - You are able to provide responses to user questions based on the tracking information and orders context.
 
-      - Tracking Information 
-      START CONTEXT BLOCK
-      ${orders_context} , ${track_all}
-      END OF CONTEXT BLOCK
+    
+      ## Orders Context
+      START ORDER CONTEXT BLOCK
+      ${orders_context}
+      END OF ORDER CONTEXT BLOCK
+      ## Tracking Information
+      START Tracking Information BLOCK
+      ${tracking_information}
+      END OF Tracking Information BLOCK
+
       - Be sure to getInformation from your knowledge base before answering any questions.
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
-      - Only respond to questions using Tracking Information and information from tool calls.
+      
       - If the user presents infromation about themselves, use the addResource tool to store it.
-      - if no relevant information is found in the tool calls, respond, "기억속에서 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
+      - If answer to user questions can be found on Tracking Information and Orders Context, use it.
+      - if no relevant information is found, respond, "기억속에서 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
     `,
-    maxSteps: 10,
+    maxSteps: 5,
     tools: {
         addResource: tool({
           description: `add a resource to your knowledge base.
@@ -77,5 +91,12 @@ export async function generateCompletion(prompt: string) {
     // } 
   });
 
+  // for await (const partialText of result.textStream) {
+  //   stream.update(partialText);
+  // } 
+
+  // stream.done();
+
+  // return stream.value;
   return createStreamableValue(result.textStream).value;
 }

@@ -42,7 +42,7 @@ const ratelimit = new Ratelimit({
   redis: RedisClient,
 });
 
-export async function submitUserMessage(
+export async function financialAssistant(
   content: string, artifact: string
 ): Promise<ClientMessage> {
   "use server";
@@ -105,17 +105,38 @@ export async function submitUserMessage(
   const result = await streamUI({
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
-    system: `\
-      - You are a helpful assistant
-      - latest stored tracking information is provided to you for understanding general tracking status.
-      - If user's activity is related to financial, find appropriate tool to call.
-      - Tracking Information 
-        START CONTEXT BLOCK
-          ${orders_context}  
-          ${track_all}
-          ${artifact}
-        END OF CONTEXT BLOCK
-    `,
+    system: `You are a helpful assistant who is capable of use tools to provide information and help with tasks.
+
+  **When to use \`createDocument\`:**
+  - For substantial content (>10 lines)
+  - For content users will likely save/reuse (emails, code, essays, etc.)
+  - When explicitly requested to create a document
+
+  **When NOT to use \`createDocument\`:**
+  - For short content (<10 lines)
+  - For informational/explanatory content
+  - For conversational responses
+  - When asked to keep it in chat
+
+  **Using \`updateDocument\`:**
+  - Default to full document rewrites for major changes
+  - Use targeted updates only for specific, isolated changes
+  - Follow user instructions for which parts to modify
+
+  Do not update document right after creating it. Wait for user feedback or request to update it.
+  `,
+    
+    // `\
+    //   - You are a helpful assistant
+    //   - latest stored tracking information is provided to you for understanding general tracking status.
+    //   - If user's activity is related to financial, find appropriate tool to call.
+    
+    //     START CONTEXT BLOCK
+    //       ${orders_context}  
+    //       ${track_all}
+    //       ${artifact}
+    //     END OF CONTEXT BLOCK
+    // `,
    
     messages: [
       ...aiState.get().messages.map((message: any) => ({
@@ -125,31 +146,31 @@ export async function submitUserMessage(
         display: null,
       })),
     ],
-    text: ({ content, done, delta }) => {
-      if (!textStream) {
-        textStream = createStreamableValue("");
-        textNode = <BotMessage content={textStream.value} />;
-      }
+    // text: ({ content, done, delta }) => {
+    //   if (!textStream) {
+    //     textStream = createStreamableValue("");
+    //     textNode = <BotMessage content={textStream.value} />;
+    //   }
 
-      if (done) {
-        textStream.done();
-        aiState.done({
-          ...aiState.get(),
-          messages: [
-            ...aiState.get().messages,
-            {
-              id: nanoid(),
-              role: "assistant",
-              content,
-            },
-          ],
-        });
-      } else {
-        textStream.update(delta);
-      }
+    //   if (done) {
+    //     textStream.done();
+    //     aiState.done({
+    //       ...aiState.get(),
+    //       messages: [
+    //         ...aiState.get().messages,
+    //         {
+    //           id: nanoid(),
+    //           role: "assistant",
+    //           content,
+    //         },
+    //       ],
+    //     });
+    //   } else {
+    //     textStream.update(delta);
+    //   }
 
-      return textNode;
-    },
+    //   return textNode;
+    // },
     tools: {
       viewCameras: {
         description: "view security cameras",
@@ -379,7 +400,7 @@ export async function submitUserMessage(
 
 export const AI = createAI<AIState, UIState>({
   actions: {
-    submitUserMessage,
+    financialAssistant,
   },
   initialUIState: [],
   onSetAIState: async ({ state, done }) => {

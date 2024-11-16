@@ -11,6 +11,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { AssistantFeedback } from "./feedback";
 import { Header } from "./header";
 import { SidebarList } from "./sidebar-list";
+import { BorderTrail } from "../border-trail";
+import { cn } from '@/lib/utils';
 
 export function Assistant() {
   const [isExpanded, setExpanded] = useState(false);
@@ -81,6 +83,19 @@ export function Assistant() {
         input={input}
         showFeedback={() => setShowFeedback(true)}
       />
+     <BorderTrail
+          className={cn(
+            'bg-gradient-to-l from-green-300 via-green-500 to-green-300  dark:from-green-500 dark:via-orange-600 dark:to-blue-500',
+           
+          )}
+          size={120}
+          transition={{
+            ease: [0, 0.5, 0.8, 0.5],
+            duration: 8,
+            repeat: Infinity,
+          }}
+        
+        />
     </div>
   );
 }

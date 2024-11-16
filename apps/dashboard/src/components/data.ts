@@ -30,25 +30,25 @@ export const ORDERS: Order[] = [
 
 export interface TrackingInformation {
   orderId: string;
-  progress: "Shipped" | "Out for Delivery" | "Delivered";
+  progress: "출고가 완료되었습니다" | "배송중 입니다" | "배송이 완료되었습니다";
   description: string;
 }
 
 export const TRACKING_INFORMATION : TrackingInformation []= [
   {
     orderId: "412093",
-    progress: "Shipped",
-    description: "Last Updated Today 4:31 PM",
+    progress: "출고가 완료되었습니다",
+    description: "마지막 업데이트 오늘 오후 4:31",
   },
   {
     orderId: "281958",
-    progress: "Out for Delivery",
-    description: "ETA Today 5:45 PM",
+    progress: "배송중 입니다",
+    description: "예상 도착시각 오늘 오후 5:45",
   },
   {
     orderId: "539182",
-    progress: "Delivered",
-    description: "Front Porch Today 3:16 PM",
+    progress: "배송이 완료되었습니다",
+    description: "현관문 앞 오늘 오후 3:16",
   },
 ];
 

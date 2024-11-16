@@ -27,7 +27,7 @@ export function Chat({
   setInput,
   showFeedback,
 }) {
-  const { submitUserMessage } = useActions();
+  const { financialAssistant } = useActions();
   const { formRef, onKeyDown } = useEnterSubmit();
   const ref = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -55,13 +55,43 @@ export function Chat({
 
     const streamableCompletion = await generateCompletion(value);
     let artifact = '';
+
+    // MiddayAgentState ; state of this assistant
+    type MiddayAgentState = {
+      category: CategoryType;
+      artifact: string;
+    };
+    type CategoryType = "financial" | "ecommerce" | "automation" | "knowledge" | "exception";
+   
     for await (const text of readStreamableValue(streamableCompletion)) {
       // console.log(text);
       submitChat(text ?? '');
       artifact += text ?? '';
     }
-    const responseMessage = await submitUserMessage(value ,artifact);
+    // decide which branch to take based on category of artifact
+    // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
+    //const routeState = await generatePath({category, artifact});
+    let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
+    let responseMessage: any;
+    switch (routeState.category) {
+      case 'financial':
+        responseMessage = await financialAssistant(value ,artifact);
+        break;
+      case 'ecommerce':
+       // category = 'ecommerce';
+        break;
+      case 'automation':
+       // category = 'automation';
+        break;
+      case 'knowledge':
+       // category = 'knowledge';
+        break;
+      case 'exception':
+        //category = 'exception';
+        break;
+    }
 
+  
     submitMessage((messages: ClientMessage[]) => [
       ...messages,
       responseMessage,
