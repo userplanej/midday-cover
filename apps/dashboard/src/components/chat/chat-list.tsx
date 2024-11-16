@@ -35,7 +35,7 @@ export function ChatList({ messages, className , completion}: Props) {
               : message.role === 'user' ? (  
                 <>
                   <div className="my-4" />
-                  <UserMessage>{message.display}</UserMessage>
+                  {message.display}
                 </>
 
               )
