@@ -32,6 +32,9 @@ const config = {
       "*": ["node_modules/canvas*"],
     },
   },
+  images: {
+		domains: ['agiyeizsowethckpxicl.supabase.co']
+	},
   // webpack: (config, { webpack }) => {
   //   config.plugins.push(
   //     new webpack.DefinePlugin({
