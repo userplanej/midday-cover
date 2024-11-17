@@ -75,32 +75,32 @@ export function Chat({
     // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
 
     // let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
-    let responseMessage: any;
+    const responseMessage = await ecommerceAssistant(value ,artifact);
    
-    const category = await generatePath(value, artifact);
+    // const category = await generatePath(value, artifact);
     
-    switch (category.category) {
-      case "financial":
-        console.log('category financial');
-        responseMessage = await financialAssistant(value ,artifact);
-        break;
-      case 'ecommerce':
-        console.log('category ecommerce');
-        responseMessage = await ecommerceAssistant(value ,artifact);
-        break;
-      case 'automation':
-        console.log('category automation');
-        responseMessage = await automationAssistant(value ,artifact);
-        break;
-      case 'knowledge':
-        console.log('category knowledge');
-        responseMessage = await generalAssistant(value ,artifact);
-        break;
-      case 'exception':
-        console.log('category exception');
-        responseMessage = await generalAssistant(value ,artifact);
-        break;
-    }
+    // switch (category.category) {
+    //   case "financial":
+    //     console.log('category financial');
+    //     responseMessage = await financialAssistant(value ,artifact);
+    //     break;
+    //   case 'ecommerce':
+    //     console.log('category ecommerce');
+    //     responseMessage = await ecommerceAssistant(value ,artifact);
+    //     break;
+    //   case 'automation':
+    //     console.log('category automation');
+    //     responseMessage = await automationAssistant(value ,artifact);
+    //     break;
+    //   case 'knowledge':
+    //     console.log('category knowledge');
+    //     responseMessage = await generalAssistant(value ,artifact);
+    //     break;
+    //   case 'exception':
+    //     console.log('category exception');
+    //     responseMessage = await generalAssistant(value ,artifact);
+    //     break;
+    //}
 
   
     submitMessage((messages: ClientMessage[]) => [
