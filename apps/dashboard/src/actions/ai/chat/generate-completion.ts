@@ -33,7 +33,8 @@ export async function generateCompletion(prompt: string) {
   const result = await streamText({               
     model: registry.languageModel(models[0] as string),
     system: `\
-      - You are a friendly assistant who is knowledgeable about e-commerce orders and tracking information.
+     You are a helpful assistant. This is only simulation of showing how you can help a user with tracking information and orders context.
+     - The data provided is for demonstration purposes only.
       - latest stored tracking information is provided to you for understanding general tracking status.
       - latest stored orders information is provided to you for understanding general orders status.
       - You are able to add resources to your knowledge base.
@@ -81,9 +82,10 @@ export async function generateCompletion(prompt: string) {
     },
    
     prompt,
-    // onFinish: (result) => {
-    //   console.log('generateCompletion result : ', result);
-    // } 
+    
+    onFinish: (result) => {
+      console.log('generateCompletion result : ', result);
+    } 
   });
 
   // for await (const partialText of result.textStream) {
