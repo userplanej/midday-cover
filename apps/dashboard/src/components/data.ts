@@ -38,17 +38,17 @@ export const TRACKING_INFORMATION : TrackingInformation []= [
   {
     orderId: "412093",
     progress: "Shipped",
-    description: "Last Updated Today 4:31 PM",
+    description: "마지막 업데이트 오늘 오후 4:31",
   },
   {
     orderId: "281958",
     progress: "Out for Delivery",
-    description: "ETA Today 5:45 PM",
+    description: "예상 도착시각 오늘 오후 5:45",
   },
   {
     orderId: "539182",
     progress: "Delivered",
-    description: "Front Porch Today 3:16 PM",
+    description: "현관문 앞 오늘 오후 3:16",
   },
 ];
 
@@ -105,3 +105,5 @@ function generateUsages(startDay: number, days: number): Usages {
 }
 
 export const USAGES: Usages = generateUsages(23, 14);
+
+

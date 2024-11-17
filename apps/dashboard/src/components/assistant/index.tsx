@@ -11,6 +11,9 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { AssistantFeedback } from "./feedback";
 import { Header } from "./header";
 import { SidebarList } from "./sidebar-list";
+import { BorderTrail } from "../border-trail";
+import { cn } from '@/lib/utils';
+import { motion } from "framer-motion";
 
 export function Assistant() {
   const [isExpanded, setExpanded] = useState(false);
@@ -55,7 +58,13 @@ export function Assistant() {
   }, [chatId]);
 
   return (
-    <div className="overflow-hidden p-0 h-full w-full todesktop:max-w-[760px] md:max-w-[760px] md:h-[480px] todesktop:h-[480px]">
+    <motion.div
+      layout
+      initial={{ opacity: 0 ,scale: 0.3}}
+      animate={{ opacity: 1 ,scale: 1, transition: {type: "spring", stiffness: 400, damping: 17}}}
+      exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+
+      className="overflow-hidden p-0 h-full w-full todesktop:max-w-[760px] md:max-w-[760px] md:h-[480px] todesktop:h-[480px]">
       {showFeedback && (
         <AssistantFeedback onClose={() => setShowFeedback(false)} />
       )}
@@ -81,6 +90,21 @@ export function Assistant() {
         input={input}
         showFeedback={() => setShowFeedback(true)}
       />
-    </div>
+    
+      <BorderTrail
+          className={cn(
+            'bg-gradient-to-l from-green-300 via-green-500 to-green-300  dark:from-green-500 dark:via-orange-600 dark:to-blue-500',
+           
+          )}
+          size={120}
+          transition={{
+            ease: [0, 0.5, 0.8, 0.5],
+            duration: 8,
+            repeat: Infinity,
+          }}
+        
+      />
+
+    </motion.div>
   );
 }
