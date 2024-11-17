@@ -15,6 +15,7 @@ import { ChatFooter } from "./chat-footer";
 import { ChatList } from "./chat-list";
 import { BotMessage, UserMessage } from "./messages";
 import { generateCompletion } from "@/actions/ai/chat/generate-completion";
+import { generatePath, MiddayAgentState } from "@/actions/ai/chat";
 
 export function Chat({
   completion,
@@ -27,7 +28,7 @@ export function Chat({
   setInput,
   showFeedback,
 }) {
-  const { financialAssistant } = useActions();
+  const { financialAssistant ,ecommerceAssistant, automationAssistant, generalAssistant} = useActions();
   const { formRef, onKeyDown } = useEnterSubmit();
   const ref = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -57,11 +58,11 @@ export function Chat({
     let artifact = '';
 
     // MiddayAgentState ; state of this assistant
-    type MiddayAgentState = {
-      category: CategoryType;
-      artifact: string;
-    };
-    type CategoryType = "financial" | "ecommerce" | "automation" | "knowledge" | "exception";
+    // type MiddayAgentState = {
+    //   category: CategoryType;
+    //   artifact: string;
+    // };
+    // type CategoryType = "financial" | "ecommerce" | "automation" | "knowledge" | "exception";
    
     for await (const text of readStreamableValue(streamableCompletion)) {
       // console.log(text);
@@ -73,25 +74,31 @@ export function Chat({
     // decide which branch to take based on category of artifact
     // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
 
-    //const routeState = await generatePath({category, artifact});
-
-    let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
+    // let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
     let responseMessage: any;
-    switch (routeState.category) {
-      case 'financial':
+   
+    const category = await generatePath(value, artifact);
+    
+    switch (category.category) {
+      case "financial":
+        console.log('category financial');
         responseMessage = await financialAssistant(value ,artifact);
         break;
       case 'ecommerce':
-       // category = 'ecommerce';
+        console.log('category ecommerce');
+        responseMessage = await ecommerceAssistant(value ,artifact);
         break;
       case 'automation':
-       // category = 'automation';
+        console.log('category automation');
+        responseMessage = await automationAssistant(value ,artifact);
         break;
       case 'knowledge':
-       // category = 'knowledge';
+        console.log('category knowledge');
+        responseMessage = await generalAssistant(value ,artifact);
         break;
       case 'exception':
-        //category = 'exception';
+        console.log('category exception');
+        responseMessage = await generalAssistant(value ,artifact);
         break;
     }
 

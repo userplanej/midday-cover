@@ -90,14 +90,11 @@ export function OTPSignIn({ className }: Props) {
             </InputOTPGroup>
           )}
         />
-
-        <button
-          onClick={() => setSent(false)}
-          type="button"
-          className="text-sm"
-        >
-          Try again
-        </button>
+        <div className="text-sm text-center">
+          <p> OPENAI CHAT API 사용으로 인하여 부득이하게 로그인한 사용자에게 서비스하고 있습니다.</p>
+          <p> OTP 입력을 마치면 자동으로 화면이 전환됩니다. 잠시만 기다려주세요...</p>
+        </div>
+      
       </div>
     );
   }

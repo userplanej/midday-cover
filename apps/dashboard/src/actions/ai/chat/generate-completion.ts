@@ -30,19 +30,15 @@ export async function generateCompletion(prompt: string) {
 
   console.log('generateCompletion received prompt : ', prompt);
 
-  const result = await streamText({
-                       
+  const result = await streamText({               
     model: registry.languageModel(models[0] as string),
     system: `\
-      - You are a friendly assistant who is knowledgeable about home automation and e-commerce order tracking management.
+      - You are a friendly assistant who is knowledgeable about e-commerce orders and tracking information.
       - latest stored tracking information is provided to you for understanding general tracking status.
       - latest stored orders information is provided to you for understanding general orders status.
       - You are able to add resources to your knowledge base.
       - You are able to get information from your knowledge base.
       - You are able to answer questions based on the tracking information and orders context.
-      - You are able to store user information in your knowledge base.
-      - You are able to provide responses to user questions.
-      - You are able to provide responses to user questions based on the tracking information and orders context.
 
     
       ## Orders Context
@@ -57,10 +53,9 @@ export async function generateCompletion(prompt: string) {
       - Be sure to getInformation from your knowledge base before answering any questions.
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
-      
-      - If the user presents infromation about themselves, use the addResource tool to store it.
       - If answer to user questions can be found on Tracking Information and Orders Context, use it.
-      - if no relevant information is found, respond, "기억속에서 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
+      - If the user presents infromation about themselves, use the addResource tool to store it.
+      - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
     `,
     maxSteps: 5,
     tools: {
