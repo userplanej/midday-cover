@@ -54,7 +54,7 @@ const categorySchema =  z.enum( ["financial", "ecommerce", "automation", "knowle
 export async function generatePath(
   query: string , artifact : string
 ) {
-
+"use server";
   console.log('generatePath received query  : ', query);
     const result = await generateObject({
       model: openai("gpt-4o-mini"),

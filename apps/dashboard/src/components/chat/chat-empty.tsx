@@ -9,6 +9,8 @@ type Props = {
 };
 
 export function ChatEmpty({ firstName }: Props) {
+
+  const welcomeMessage = `Hello ${firstName}! 👋 Welcome to our chat. How can I help you today?`;
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -50,14 +52,12 @@ export function ChatEmpty({ firstName }: Props) {
     },
   };
   return (
-    <div className="w-full  mt-1  md:m-1 flex flex-col items-start justify-items-start text-center">
+    <div className="w-full  mt-1  md:m-1 flex flex-col items-center justify-between text-center
+    text-2xl font-bold text-gray-600">
         
-      <span className=" mt-6">
-        안녕하세요 {firstName}, 무엇을  
-        도와드릴까요?
-      </span>
-      <TextEffect per='word' variants={fancyVariants}>
-      Animate your ideas with motion-primitives
+   
+    <TextEffect per='word' variants={fancyVariants}>
+      {welcomeMessage}
     </TextEffect>
     </div>
   );
