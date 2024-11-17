@@ -5,8 +5,6 @@ import { Button } from "@midday/ui/button";
 
 export function AssistantButton() {
 
-  console.log(" AssistantButton section ")
-
   const { setOpen } = useAssistantStore();
 
   return (
@@ -16,6 +14,7 @@ export function AssistantButton() {
       onClick={() => setOpen()}
     >
       <span className="ml-4 md:ml-0">무엇을 도와드릴까요?</span>
+
       <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 border bg-accent px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
         <span className="text-xs">⌘</span>K
       </kbd>

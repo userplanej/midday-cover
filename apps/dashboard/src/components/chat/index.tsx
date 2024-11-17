@@ -68,9 +68,13 @@ export function Chat({
       submitChat(text ?? '');
       artifact += text ?? '';
     }
+
+    // generatePath workflow
     // decide which branch to take based on category of artifact
     // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
+
     //const routeState = await generatePath({category, artifact});
+
     let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
     let responseMessage: any;
     switch (routeState.category) {

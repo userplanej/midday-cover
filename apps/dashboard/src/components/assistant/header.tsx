@@ -26,8 +26,6 @@ export function Header({ toggleSidebar, isExpanded }: Props) {
             <Icons.Sidebar width={18} />
           )}
         </Button>
-
-        <h2>무엇을 도와드릴까요 ?</h2>
       </div>
 
       <Button

@@ -14,6 +14,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { SignOut } from "./sign-out";
 import { ThemeSwitch } from "./theme-switch";
+import usericon from 'public/27579857548808313220067112164732059904037457n.jpg';
+
 
 export async function UserMenu({ onlySignOut }) {
   const { data: userData } = await getUser();
@@ -24,8 +26,8 @@ export async function UserMenu({ onlySignOut }) {
         <Avatar className="rounded-full w-8 h-8 cursor-pointer">
           {userData?.avatar_url && (
             <Image
-              src={userData?.avatar_url}
-              alt={userData?.full_name}
+              src={usericon}
+              alt={"usericon"}
               width={32}
               height={32}
             />

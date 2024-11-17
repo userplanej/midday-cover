@@ -50,18 +50,18 @@ const defaultItems = [
     path: "/invoices",
     name: "Invoices",
   },
-  {
-    path: "/spacex",
-    name: "SpaceX",
-  },
-  {
-    path: "/gelatinouscube",
-    name: "Gelatinous Cube",
-  },
-  {
-    path: "/stock",
-    name: "Chart",
-  },
+  // {
+  //   path: "/spacex",
+  //   name: "SpaceX",
+  // },
+  // {
+  //   path: "/gelatinouscube",
+  //   name: "Gelatinous Cube",
+  // },
+  // {
+  //   path: "/stock",
+  //   name: "Chart",
+  // },
   {
     path: "/tracker",
     name: "Tracker",
@@ -74,10 +74,7 @@ const defaultItems = [
     path: "/settings",
     name: "Settings",
   },
-  {
-    path: "/account",
-    name: "Account",
-  },
+
 ];
 
 interface ItemProps {
