@@ -54,16 +54,17 @@ const categorySchema =  z.enum( ["financial", "ecommerce", "automation", "knowle
 export async function generatePath(
   query: string , artifact : string
 ) {
-
-  console.log('generatePath received query  : ', query);
+"use server";
+  console.log('Router received query  : ', query);
+  console.log('Router received artifact  : ', artifact);
     const result = await generateObject({
       model: openai("gpt-4o-mini"),
       schema: z.object({
         category: categorySchema,
       }),
       system: `\
-     query가 주어지면, 주어진 카테고리 정보 중에서 해당 문장에 가장 적합한 카테고리를 선택하세요.
-
+     query와 artifact가 주어지면, 주어진 카테고리 정보 중에서 해당 문장에 가장 적합한 카테고리를 선택하세요.
+     Artifact는 이전단계의 결과입니다.
 # Steps
 
 1. **문장 해석하기**: 주어진 입력 문장을 분석하여 문장의 주요 주제, 문맥, 감정, 또는 의미를 파악합니다.
@@ -117,6 +118,11 @@ export async function generatePath(
 **입력 문장**: "지난주 방문한 중국 음식점 이름이 뭐야."
 **카테고리들**: ["financial", "ecommerce", "automation", "knowledge", "exception"]
 **출력**: "knowledge"
+
+**입력 문장**: "메모리에 의하면,"
+**카테고리들**: ["financial", "ecommerce", "automation", "knowledge", "exception"]
+**출력**: "knowledge"
+
 # Notes
 
 - 입력 문장이 명확하게 하나 이상의 카테고리에 속하는 경우, 가장 적합한 하나를 선택하세요.
@@ -355,6 +361,8 @@ export async function ecommerceAssistant(  content: string, artifact: string
 ): Promise<ClientMessage> {
   "use server";
   console.log('ecommerceAssistant assists you');
+  console.log('ecommerceAssistant prompts : ', content);
+  console.log('ecommerceAssistant artifact : ', artifact);
   const ip = headers().get("x-forwarded-for");
   const { success } = await ratelimit.limit(ip);
 

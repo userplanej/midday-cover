@@ -33,35 +33,22 @@ export async function generateCompletion(prompt: string) {
   const result = await streamText({               
     model: registry.languageModel(models[0] as string),
     system: `\
-      - You are a friendly assistant who is knowledgeable about e-commerce orders and tracking information.
-      - latest stored tracking information is provided to you for understanding general tracking status.
-      - latest stored orders information is provided to you for understanding general orders status.
-      - You are able to add resources to your knowledge base.
-      - You are able to get information from your knowledge base.
-      - You are able to answer questions based on the tracking information and orders context.
-
-    
-      ## Orders Context
-      START ORDER CONTEXT BLOCK
-      ${orders_context}
-      END OF ORDER CONTEXT BLOCK
-      ## Tracking Information
-      START Tracking Information BLOCK
-      ${tracking_information}
-      END OF Tracking Information BLOCK
-
+You are a helpful assistant. 
+you can help a user with orders ,tracking information and knowledge.
+      - orders is provided to you with ${orders_context}
+      - tracking information is provided to you with ${tracking_information}
       - Be sure to getInformation from your knowledge base before answering any questions.
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
-      - If answer to user questions can be found on Tracking Information and Orders Context, use it.
+      - Only respond to questions using Tracking Information and information from tool calls.
       - If the user presents infromation about themselves, use the addResource tool to store it.
+      - If relevant information is found in knowledge base, respond with "메모리에 의하면, [response]."
       - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
     `,
     maxSteps: 5,
     tools: {
         addResource: tool({
-          description: `add a resource to your knowledge base.
-            If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
+          description: `add a resource to your knowledge base.`,
           parameters: z.object({
             content: z
               .string()
@@ -69,21 +56,22 @@ export async function generateCompletion(prompt: string) {
           }),
           execute: async ({ content }) => createResource({ content }),
         }),
-
-    
         getInformation: tool({
-          description: `get information from your knowledge base to answer questions.`,
+          description: `get information from your knowledge base to answer general questions.`,
           parameters: z.object({
             question: z.string().describe('the users question'),
           }),
           execute: async ({ question }) => findRelevantContent(question),
         }),
     },
-   
+    onStepFinish: async ({ toolResults }) => {
+      console.log(`STEP RESULTS: ${JSON.stringify(toolResults, null, 2)}`);
+    },
     prompt,
-    // onFinish: (result) => {
-    //   console.log('generateCompletion result : ', result);
-    // } 
+
+    onFinish: (result) => {
+      console.log('result:', result);
+    } 
   });
 
   // for await (const partialText of result.textStream) {
@@ -92,6 +80,6 @@ export async function generateCompletion(prompt: string) {
 
   // stream.done();
 
-  // return stream.value;
+
   return createStreamableValue(result.textStream).value;
 }

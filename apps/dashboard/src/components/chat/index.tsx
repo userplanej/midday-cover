@@ -54,8 +54,15 @@ export function Chat({
       },
     ]);
 
-    const streamableCompletion = await generateCompletion(value);
     let artifact = '';
+    const streamableCompletion = await generateCompletion(value);
+   
+    for await (const text of readStreamableValue(streamableCompletion)) {
+      // console.log(text);
+      submitChat(text ?? '');
+      artifact = text ?? '';
+    }
+
 
     // MiddayAgentState ; state of this assistant
     // type MiddayAgentState = {
@@ -64,19 +71,12 @@ export function Chat({
     // };
     // type CategoryType = "financial" | "ecommerce" | "automation" | "knowledge" | "exception";
    
-    for await (const text of readStreamableValue(streamableCompletion)) {
-      // console.log(text);
-      submitChat(text ?? '');
-      artifact += text ?? '';
-    }
-
     // generatePath workflow
     // decide which branch to take based on category of artifact
     // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
 
     // let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
-    let responseMessage: any;
-   
+    let responseMessage;
     const category = await generatePath(value, artifact);
     
     switch (category.category) {
