@@ -184,7 +184,8 @@ export async function automationAssistant(  content: string, artifact: string
       },
     ],
   });
-
+  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
+  let textNode: undefined | React.ReactNode;
   const result = await streamUI({
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
@@ -197,6 +198,31 @@ export async function automationAssistant(  content: string, artifact: string
         display: null,
       })),
     ],
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       viewCameras: {
         description: "view security cameras",
@@ -404,38 +430,53 @@ export async function ecommerceAssistant(  content: string, artifact: string
   });
   const tracking_information = JSON.stringify(getAllTrackingInformation());
   const orders_context = JSON.stringify(getOrders());
+  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
+  let textNode: undefined | React.ReactNode;
+
   const result = await streamUI({
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
    
     system: `\
 You are a helpful assistant.
-You will be provided with the latest order list, tracking information, and an Artifact. Analyze the user query to determine which tool is suitable based on the provided data.
-The following contexts will be given:
+Use proper tools to assist user.
+* Do not answer from 'artifact' directly. Use 'artifact' to understand current context and select appropriate tool.
 
+The following contexts will be given:
+- Artifact: The Artifact from the previous step will be given in the 
+${artifact} block.
 - Order List: The latest context of user orders will be in the block 
 ${orders_context}
 - Tracking Information: Shipping details associated with the orders will be available in the 
 ${tracking_information} block.
-- Artifact: The Artifact from the previous step will be given in the 
-${artifact} block.
-
-Use these contexts to understand and respond to the user's query effectively.
-
-# Notes
-
-- Make sure to thoroughly analyze the user's input before choosing the tool.
-- If the required information spans multiple contexts, correlate them effectively before making a decision.
-- Always provide the  'orderId'  if the user is asking about a specific order's status or shipping details.
 `,
-    messages: [
-      ...aiState.get().messages.map((message: any) => ({
-        role: message.role,
-        content: message.content,
-        name: message.name,
-        display: null,
-      })),
-    ],
+  prompt: content
+    ,
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       listOrders: {
         description: "list all e-commerce orders",
@@ -525,6 +566,10 @@ Use these contexts to understand and respond to the user's query effectively.
         },
       },
     },
+    
+    onFinish: (result) => {
+      console.log('Assistant onFinish:', result);
+    } 
   },
   );
   return {
@@ -657,6 +702,31 @@ export async function financialAssistant(
 
     //   return textNode;
     // },
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       getSpending: getSpendingTool({
         aiState,
