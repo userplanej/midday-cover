@@ -33,29 +33,13 @@ export async function generateCompletion(prompt: string) {
   const result = await streamText({               
     model: registry.languageModel(models[0] as string),
     system: `\
-     You are a helpful assistant. This is only simulation of showing how you can help a user with tracking information and orders context.
-     - The data provided is for demonstration purposes only.
-      - latest stored tracking information is provided to you for understanding general tracking status.
-      - latest stored orders information is provided to you for understanding general orders status.
-      - You are able to add resources to your knowledge base.
-      - You are able to get information from your knowledge base.
-      - You are able to answer questions based on the tracking information and orders context.
-
-    
-      ## Orders Context
-      START ORDER CONTEXT BLOCK
-      ${orders_context}
-      END OF ORDER CONTEXT BLOCK
-      ## Tracking Information
-      START Tracking Information BLOCK
-      ${tracking_information}
-      END OF Tracking Information BLOCK
-
-      - Be sure to getInformation from your knowledge base before answering any questions.
+You are a helpful assistant. This is only simulation of showing how you can help a user with orders ,tracking information and knowledge.
+      - The data provided is for demonstration purposes only.
+      - latest orders information is provided to you with ${orders_context}
+      - latest tracking information is provided to you with ${tracking_information}
+      - If the user presents infromation about themselves, use the addResource tool to store it.
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
-      - If answer to user questions can be found on Tracking Information and Orders Context, use it.
-      - If the user presents infromation about themselves, use the addResource tool to store it.
       - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
     `,
     maxSteps: 5,
@@ -73,7 +57,7 @@ export async function generateCompletion(prompt: string) {
 
     
         getInformation: tool({
-          description: `get information from your knowledge base to answer questions.`,
+          description: `get information from your knowledge base to answer general questions.`,
           parameters: z.object({
             question: z.string().describe('the users question'),
           }),
@@ -82,7 +66,7 @@ export async function generateCompletion(prompt: string) {
     },
    
     prompt,
-    
+
     onFinish: (result) => {
       console.log('generateCompletion result : ', result);
     } 
