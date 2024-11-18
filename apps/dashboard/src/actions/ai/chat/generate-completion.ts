@@ -33,20 +33,22 @@ export async function generateCompletion(prompt: string) {
   const result = await streamText({               
     model: registry.languageModel(models[0] as string),
     system: `\
-You are a helpful assistant. This is only simulation of showing how you can help a user with orders ,tracking information and knowledge.
-      - The data provided is for demonstration purposes only.
-      - latest orders information is provided to you with ${orders_context}
-      - latest tracking information is provided to you with ${tracking_information}
-      - If the user presents infromation about themselves, use the addResource tool to store it.
+You are a helpful assistant. 
+you can help a user with orders ,tracking information and knowledge.
+      - orders is provided to you with ${orders_context}
+      - tracking information is provided to you with ${tracking_information}
+      - Be sure to getInformation from your knowledge base before answering any questions.
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
+      - Only respond to questions using Tracking Information and information from tool calls.
+      - If the user presents infromation about themselves, use the addResource tool to store it.
+      - If relevant information is found in knowledge base, respond with "메모리에 의하면, [response]."
       - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
     `,
     maxSteps: 5,
     tools: {
         addResource: tool({
-          description: `add a resource to your knowledge base.
-            If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
+          description: `add a resource to your knowledge base.`,
           parameters: z.object({
             content: z
               .string()
@@ -54,8 +56,6 @@ You are a helpful assistant. This is only simulation of showing how you can help
           }),
           execute: async ({ content }) => createResource({ content }),
         }),
-
-    
         getInformation: tool({
           description: `get information from your knowledge base to answer general questions.`,
           parameters: z.object({
@@ -64,11 +64,13 @@ You are a helpful assistant. This is only simulation of showing how you can help
           execute: async ({ question }) => findRelevantContent(question),
         }),
     },
-   
+    onStepFinish: async ({ toolResults }) => {
+      console.log(`STEP RESULTS: ${JSON.stringify(toolResults, null, 2)}`);
+    },
     prompt,
 
     onFinish: (result) => {
-      console.log('generateCompletion result : ', result);
+      console.log('result:', result);
     } 
   });
 
@@ -78,6 +80,6 @@ You are a helpful assistant. This is only simulation of showing how you can help
 
   // stream.done();
 
-  // return stream.value;
+
   return createStreamableValue(result.textStream).value;
 }
