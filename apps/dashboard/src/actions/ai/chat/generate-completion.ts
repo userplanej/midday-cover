@@ -31,7 +31,7 @@ export async function generateCompletion(prompt: string) {
   console.log('generateCompletion received prompt : ', prompt);
 
   const result = await streamText({               
-    model: registry.languageModel(models[1] as string),
+    model: registry.languageModel(models[0] as string),
     system: `\
 You are a helpful assistant. 
 you can help a user with orders ,tracking information and knowledge.
