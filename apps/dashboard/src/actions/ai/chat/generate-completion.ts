@@ -31,19 +31,20 @@ export async function generateCompletion(prompt: string) {
   console.log('generateCompletion received prompt : ', prompt);
 
   const result = await streamText({               
-    model: registry.languageModel(models[0] as string),
+    model: registry.languageModel(models[1] as string),
     system: `\
 You are a helpful assistant. 
 you can help a user with orders ,tracking information and knowledge.
-      - orders is provided to you with ${orders_context}
-      - tracking information is provided to you with ${tracking_information}
-      - Be sure to getInformation from your knowledge base before answering any questions.
+      - orders is provided to you with ${orders_context} for question about orders.
+      - tracking information is provided to you with ${tracking_information} for questions about tracking.
+      - you can answer question about orders and tracking information based on the context provided.
+      - you can also answer general questions based on the knowledge base.
+      - Be sure to use 'getInformation' tool from your knowledge base before answering general questions.
+      - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
+      - If relevant information is found in knowledge base for general question, respond with "메모리에 의하면, [response]."
       - when you answer a question, you should provide a response with "주인님, " at the beginning.
       - you do not ever use lists, tables, or bullet points; instead, you provide a single response.
-      - Only respond to questions using Tracking Information and information from tool calls.
-      - If the user presents infromation about themselves, use the addResource tool to store it.
-      - If relevant information is found in knowledge base, respond with "메모리에 의하면, [response]."
-      - if no relevant information is found, respond, "메모리된 기억에서는 찾을 수 없어요. 다음 Agent를 호출하도록 하겠습니다.".
+      - If the user presents infromation about themselves, use the 'addResource' tool to store it. 
     `,
     maxSteps: 5,
     tools: {
@@ -65,12 +66,12 @@ you can help a user with orders ,tracking information and knowledge.
         }),
     },
     onStepFinish: async ({ toolResults }) => {
-      console.log(`STEP RESULTS: ${JSON.stringify(toolResults, null, 2)}`);
+      console.log(`generateCompletion STEP RESULTS: ${JSON.stringify(toolResults, null, 2)}`);
     },
     prompt,
 
     onFinish: (result) => {
-      console.log('result:', result);
+      console.log('generateCompletion onFinish:', result);
     } 
   });
 

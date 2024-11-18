@@ -184,7 +184,8 @@ export async function automationAssistant(  content: string, artifact: string
       },
     ],
   });
-
+  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
+  let textNode: undefined | React.ReactNode;
   const result = await streamUI({
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
@@ -197,6 +198,31 @@ export async function automationAssistant(  content: string, artifact: string
         display: null,
       })),
     ],
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       viewCameras: {
         description: "view security cameras",
@@ -404,6 +430,9 @@ export async function ecommerceAssistant(  content: string, artifact: string
   });
   const tracking_information = JSON.stringify(getAllTrackingInformation());
   const orders_context = JSON.stringify(getOrders());
+  let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
+  let textNode: undefined | React.ReactNode;
+
   const result = await streamUI({
     model: openai("gpt-4o"),
     initial: <SpinnerMessage />,
@@ -436,6 +465,31 @@ Use these contexts to understand and respond to the user's query effectively.
         display: null,
       })),
     ],
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       listOrders: {
         description: "list all e-commerce orders",
@@ -657,6 +711,31 @@ export async function financialAssistant(
 
     //   return textNode;
     // },
+    text: ({ content, done, delta }) => {
+      if (!textStream) {
+        textStream = createStreamableValue("");
+        textNode = <BotMessage content={textStream.value} />;
+      }
+
+      if (done) {
+        textStream.done();
+        aiState.done({
+          ...aiState.get(),
+          messages: [
+            ...aiState.get().messages,
+            {
+              id: nanoid(),
+              role: "assistant",
+              content,
+            },
+          ],
+        });
+      } else {
+        textStream.update(delta);
+      }
+
+      return textNode;
+    },
     tools: {
       getSpending: getSpendingTool({
         aiState,
