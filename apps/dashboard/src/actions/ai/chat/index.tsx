@@ -450,33 +450,7 @@ ${orders_context}
 - Tracking Information: Shipping details associated with the orders will be available in the 
 ${tracking_information} block.
 `,
-  prompt: content
-    ,
-    text: ({ content, done, delta }) => {
-      if (!textStream) {
-        textStream = createStreamableValue("");
-        textNode = <BotMessage content={textStream.value} />;
-      }
-
-      if (done) {
-        textStream.done();
-        aiState.done({
-          ...aiState.get(),
-          messages: [
-            ...aiState.get().messages,
-            {
-              id: nanoid(),
-              role: "assistant",
-              content,
-            },
-          ],
-        });
-      } else {
-        textStream.update(delta);
-      }
-
-      return textNode;
-    },
+    prompt: content,
     tools: {
       listOrders: {
         description: "list all e-commerce orders",

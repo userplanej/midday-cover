@@ -64,7 +64,7 @@ export function Assistant() {
       animate={{ opacity: 1 ,scale: 1, transition: {type: "spring", stiffness: 400, damping: 17}}}
       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
 
-      className="overflow-hidden p-0 h-full w-full todesktop:max-w-[760px] md:max-w-[760px] md:h-[480px] todesktop:h-[480px]">
+      className="overflow-hidden p-0 h-full w-full todesktop:max-w-[760px] md:max-w-[760px] md:h-[480px] todesktop:h-[480px] dark:bg-black">
       {showFeedback && (
         <AssistantFeedback onClose={() => setShowFeedback(false)} />
       )}

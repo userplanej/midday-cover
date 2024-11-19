@@ -91,7 +91,7 @@ export function OTPSignIn({ className }: Props) {
           )}
         />
         <div className="text-sm text-center">
-          <p> 입력하신 email로 OTP를 보내드렸습니다. </p>
+          <p>email로 보내드린 OTP를 *정확하게* 입력하고 잠시 기다리세요</p>
         </div>
       
       </div>

@@ -1,17 +1,7 @@
 export const chatExamples = [
-  `What's my burn rate`,
-  `What's my runway`,
-  "Show transactions without receipts",
-  "What is my spending on Software",
-  "Find a receipt or invoice",
-  "Find a transaction",
-  `What's my profit for last year`,
-  `What's my revenue`,
-  "Create a report",
-  "Forecast profit",
-  "Forecast revenue",
-  "Analyze monthly expenses",
-  "Summarize quarterly expenses",
-  "Generate a cash flow statement",
-  "Calculate tax liability",
+  `온라인 주문목록 확인해줘`,
+  `이번달 전기사용량 알려줘`,
+  "보안 카메라 보여줘",
+  "software 부분 수익 보여줘",
+
 ];
