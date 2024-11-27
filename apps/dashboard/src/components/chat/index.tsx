@@ -172,6 +172,7 @@ export function Chat({
 
         <ChatFooter
           onSubmit={() => onSubmit(input)}
+          onNewChat={onNewChat}
           showFeedback={showFeedback}
         />
       </div>
