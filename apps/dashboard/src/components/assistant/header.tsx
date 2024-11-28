@@ -2,13 +2,15 @@ import { useAssistantStore } from "@/store/assistant";
 import { Button } from "@midday/ui/button";
 import { Icons } from "@midday/ui/icons";
 import { Experimental } from "../experimental";
+import { Toolbar } from "./toolbar";
 
 type Props = {
   isExpanded: boolean;
+  onNewChat: () => void;
   toggleSidebar: () => void;
 };
 
-export function Header({ toggleSidebar, isExpanded }: Props) {
+export function Header({ toggleSidebar, onNewChat, isExpanded }: Props) {
   const { setOpen } = useAssistantStore();
 
   return (
@@ -30,15 +32,24 @@ export function Header({ toggleSidebar, isExpanded }: Props) {
 
       <Button
         className="flex md:hidden todesktop:hidden"
-        size="icon"
+        
         variant="ghost"
         onClick={() => setOpen()}
       >
-        <Icons.Close />
+       
+        <div className=" flex items-center justify-center">
+          <div className="  dark:text-white  rounded-full  h-6 w-full justify-between items-center flex px-2 space-x-2 text-[#878787]">
+              
+              <span className="text-xs">Close</span>
+              <Icons.Close />
+          
+          </div>
+      </div>
       </Button>
 
-      <div className="space-x-2 items-center hidden md:flex todesktop:flex">
-        <Experimental className="border-border text-[#878787]" />
+      <div className="space-x-2 items-center  md:flex todesktop:flex">
+        <Toolbar onNewChat={onNewChat} />
+        
       </div>
     </div>
   );
