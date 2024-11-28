@@ -35,7 +35,7 @@ export function ChatExamples({ onSubmit }) {
 
   return (
     <div
-      className="absolute z-10 bottom-[100px] left-0 right-0 overflow-scroll scrollbar-hide cursor-grabbing hidden md:block"
+      className="absolute z-10 bottom-[100px] left-0 right-0 overflow-scroll scrollbar-hide cursor-grabbing  md:block"
       {...events}
       ref={ref}
     >

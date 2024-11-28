@@ -77,7 +77,7 @@ export function Assistant() {
         chatId={chatId}
       />
 
-      <Header toggleSidebar={toggleOpen} isExpanded={isExpanded} />
+      <Header toggleSidebar={toggleOpen} isExpanded={isExpanded} onNewChat={onNewChat}/>
 
       <Chat
         completion={completion}
