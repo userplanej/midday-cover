@@ -13,7 +13,7 @@ import { ChatEmpty } from "./chat-empty";
 import { ChatExamples } from "./chat-examples";
 import { ChatFooter } from "./chat-footer";
 import { ChatList } from "./chat-list";
-import { BotMessage, UserMessage } from "./messages";
+import { UserMessage } from "./messages";
 import { generateCompletion } from "@/actions/ai/chat/generate-completion";
 import { generatePath, MiddayAgentState } from "@/actions/ai/chat";
 
@@ -56,26 +56,13 @@ export function Chat({
 
     let artifact = '';
     const streamableCompletion = await generateCompletion(value);
-   
+    submitChat("loading...");
     for await (const text of readStreamableValue(streamableCompletion)) {
       // console.log(text);
       submitChat(text ?? '');
       artifact = text ?? '';
     }
-
-
-    // MiddayAgentState ; state of this assistant
-    // type MiddayAgentState = {
-    //   category: CategoryType;
-    //   artifact: string;
-    // };
-    // type CategoryType = "financial" | "ecommerce" | "automation" | "knowledge" | "exception";
-   
-    // generatePath workflow
-    // decide which branch to take based on category of artifact
-    // There are categories:  1. financial 2.ecommerce 3.home automation 4.knowledge base 5.exception
-
-    // let routeState: MiddayAgentState = { category: 'financial', artifact: artifact };
+    // set loading-spinner done
     let responseMessage;
     const category = await generatePath(value, artifact);
     

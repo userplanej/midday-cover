@@ -1,10 +1,12 @@
+// @ts-nocheck
 'use server';
 
 import { openai } from '@ai-sdk/openai';
-import { createStreamableValue } from 'ai/rsc';
+import { createStreamableValue, createStreamableUI } from 'ai/rsc';
 // import { anthropic } from "@ai-sdk/anthropic";
 import { experimental_createProviderRegistry, streamText, convertToCoreMessages , tool} from "ai";
 // import { google } from "@ai-sdk/google";
+import { BotCard, BotMessage, Message, SpinnerMessage } from "@/components/chat/messages";
 import { getAllTrackingInformation, getOrders } from '@/components/data';
 import { z } from "zod";
 import { createResource } from './resources';
@@ -29,6 +31,9 @@ const orders_context = JSON.stringify(getOrders());
 export async function generateCompletion(prompt: string) {
 
   console.log('generateCompletion received prompt : ', prompt);
+
+  //const spinnerStream = createStreamableUI(<SpinnerMessage/>)
+ 
 
   const result = await streamText({               
     model: registry.languageModel(models[0] as string),

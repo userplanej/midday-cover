@@ -2,7 +2,7 @@
 
 import type { ClientMessage } from "@/actions/ai/types";
 import { cn } from "@midday/ui/cn";
-import { BotMessage, BotReason, UserMessage } from "./messages";
+import { BotReason } from "./messages";
 
 type Props = {
   completion: string;
@@ -16,7 +16,7 @@ export function ChatList({ messages, className , completion}: Props) {
   if (!messages.length) {
     return null;
   }
-  
+
   const  textNode = <BotReason content={completion} />
 
   return (
@@ -27,7 +27,6 @@ export function ChatList({ messages, className , completion}: Props) {
           <div key={message.id}>
             { message.role === 'assistant' ? (
                 <>
-                  {textNode}
                   <div className="my-4" />
                   {message.display}
                 </>
@@ -36,6 +35,8 @@ export function ChatList({ messages, className , completion}: Props) {
                 <>
                   <div className="my-4" />
                   {message.display}
+                  <div className="my-4" />
+                  {textNode}
                 </>
 
               )
@@ -45,8 +46,6 @@ export function ChatList({ messages, className , completion}: Props) {
               )
              
             }
-        
-            {index < messages.length - 1 && <div className="my-4" />}
           </div>
         ))}
     </div>
