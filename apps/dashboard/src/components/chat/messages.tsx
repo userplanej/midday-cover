@@ -43,7 +43,7 @@ export function BotReason({
 }: {
   content: string | StreamableValue<string>;
 }) {
-  const text = useStreamableText(content);
+  //const text = useStreamableText(content);
 
   return (
     <ErrorBoundary errorComponent={ErrorFallback}>
@@ -52,7 +52,7 @@ export function BotReason({
           <ReasonAvatar role="assistant" />
         </div>
 
-        <div className="ml-4 flex-1 space-y-2  overflow-hidden pl-2 text-xs font-mono">
+        <div className="ml-4 flex-1 space-y-2  overflow-hidden pl-2 text-xs font-mono leading-relaxed" >
           <MemoizedReactMarkdown
             className="prose break-words dark:prose-invert leading-relaxed prose-pre:p-0 mb-2 last:mb-0 text-xs font-mono"
             components={{
@@ -67,7 +67,7 @@ export function BotReason({
               },
             }}
           >
-            {text}
+            {content as string}
           </MemoizedReactMarkdown>
         </div>
       </div>
@@ -149,20 +149,20 @@ export const Message = ({
   content: string | ReactNode;
 }) => {
   return (
-    <motion.div
-      className={`flex flex-row gap-4 px-4 w-full md:w-[500px] md:px-0 first-of-type:pt-20`}
-      initial={{ y: 5, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-    >
-      <div className="flex size-[25px] shrink-0 select-none items-center justify-center">  
-        {role === "assistant" ? <ChatAvatar role="assistant" /> : <ChatAvatar  role="assistant"/>}
+
+
+     <div className="group relative flex items-start">
+      <div className="flex size-[25px] shrink-0 select-none items-center justify-center">
+        {<ChatAvatar role="assistant" />}
       </div>
 
-      <div className="flex flex-col gap-1 w-full">
-        <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-          {content}
-        </div>
-      </div>
-    </motion.div>
+     <div
+       className={cn(
+         "ml-4 flex-1 space-y-2 overflow-hidden pl-2 text-xs font-mono leading-relaxed",
+       )}
+     >
+       {content}
+     </div>
+   </div>
   );
 };
