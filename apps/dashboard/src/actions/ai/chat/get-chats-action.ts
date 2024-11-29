@@ -7,7 +7,7 @@ import type { Chat } from "../types";
 export async function getChatsAction() {
   const data = await getChats();
 
-  if (!data.length) {
+  if (!data || !data.length) {
     return [];
   }
 
