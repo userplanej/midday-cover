@@ -56,7 +56,7 @@ export function Chat({
 
     let artifact = '';
     const streamableCompletion = await generateCompletion(value);
-    submitChat("loading...");
+    submitChat("좋은 하루 보내고 계신가요 ?📣");
     for await (const text of readStreamableValue(streamableCompletion)) {
       // console.log(text);
       submitChat(text ?? '');

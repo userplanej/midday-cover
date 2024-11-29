@@ -132,7 +132,14 @@ export async function getChat(id: string) {
 
   const userId = session?.user.id;
 
-  const chat = await RedisClient.hgetall<Chat>(`chat:${id}`);
+  let chat:Chat|null;
+  
+  try {
+    chat = await RedisClient.hgetall(`chat:${id}`);
+  }
+  catch (error) {
+    return null;
+  }
 
   if (!chat || (userId && chat.userId !== userId)) {
     return null;
