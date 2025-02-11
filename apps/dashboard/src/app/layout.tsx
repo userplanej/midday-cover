@@ -65,8 +65,8 @@ export const viewport = {
   ],
 };
 
-export const preferredRegion = ["fra1", "sfo1", "iad1"];
-export const maxDuration = 60;
+// export const preferredRegion = ["fra1", "sfo1", "iad1"];
+export const maxDuration = 120;
 
 export default function Layout({
   children,
