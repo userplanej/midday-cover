@@ -14,7 +14,7 @@ import { cookies } from "next/headers";
 
 // NOTE: GoCardLess serverAction needs this currently
 // (Fetch accounts takes up to 20s and default limit is 15s)
-export const maxDuration = 30;
+export const maxDuration = 120;
 
 export const metadata: Metadata = {
   title: "Overview | Midday",
